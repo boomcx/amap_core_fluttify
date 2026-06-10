@@ -22,7 +22,8 @@ A new flutter plugin project.
   s.dependency 'AMapFoundation-NO-IDFA', '~> 1.6.9'
 
   s.static_framework = true
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '12.0'
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   # include project framework
   s.vendored_frameworks = 'Vendors/*.framework'
   # include project .a
