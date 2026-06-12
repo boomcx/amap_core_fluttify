@@ -21,11 +21,9 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 import io.flutter.plugin.platform.PlatformViewRegistry;
 
-import me.yohom.amap_core_fluttify.sub_handler.*;
 import me.yohom.amap_core_fluttify.sub_handler.custom.SubHandlerCustom;
 import me.yohom.foundation_fluttify.core.FluttifyMessageCodec;
 
@@ -36,29 +34,6 @@ import static me.yohom.foundation_fluttify.FoundationFluttifyPluginKt.getHEAP;
 public class AmapCoreFluttifyPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
     private static List<Map<String, Handler>> handlerMapList;
-
-    // v1 android embedding for compatible
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "me.yohom/amap_core_fluttify", new StandardMethodCodec(new FluttifyMessageCodec()));
-
-        AmapCoreFluttifyPlugin plugin = new AmapCoreFluttifyPlugin();
-
-        BinaryMessenger messenger = registrar.messenger();
-        PlatformViewRegistry platformViewRegistry = registrar.platformViewRegistry();
-        Activity activity = registrar.activity();
-
-        plugin.messenger = messenger;
-        plugin.platformViewRegistry = platformViewRegistry;
-
-        handlerMapList = new ArrayList<>();
-        
-        handlerMapList.add(SubHandlerCustom.instance.getSubHandler(messenger, registrar.activity()));
-
-        channel.setMethodCallHandler(plugin);
-
-        // register platform view
-        
-    }
 
     private BinaryMessenger messenger;
     private PlatformViewRegistry platformViewRegistry;
