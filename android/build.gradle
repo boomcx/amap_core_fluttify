@@ -1,21 +1,12 @@
-group 'me.yohom.amap_core_fluttify'
-version '1.0-SNAPSHOT'
-
-// rootProject.allprojects {
-//     repositories {
-//         maven { url 'https://maven.aliyun.com/repository/google' }
-//         maven { url 'https://maven.aliyun.com/repository/central' }
-//         google()
-//         mavenCentral()
-//     }
-// }
-
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+// 1. 必须使用声明式 plugins 块（替换所有 apply plugin）
+plugins {
+    id "com.android.library"  // 替换 apply plugin: 'com.android.library'
+    id "org.jetbrains.kotlin.android" // 替换 apply plugin: 'kotlin-android'（新版 Kotlin 插件 ID）
+}
 
 android {
     namespace 'me.yohom.amap_core_fluttify'
-    compileSdk 36
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -23,25 +14,30 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = "17" // 注意：Gradle 7.5+ 要求使用双引号
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        main.jniLibs.srcDir 'libs'
+        main.java.srcDirs += "src/main/kotlin"
+        main.jniLibs.srcDir "libs"
     }
+    
     defaultConfig {
         minSdk 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    
     lint {
-        disable 'InvalidPackage'
+        disable "InvalidPackage"
     }
+    
     packaging {
         resources {
-            merges += ['res/values/values.xml', 'AndroidManifest.xml', 'R.txt', 'classes.jar', 'proguard.txt']
+            // 2. 修复 merges 语法（新版 Gradle 要求使用 merges 而非 merges +=）
+            merges = ["res/values/values.xml", "AndroidManifest.xml", "R.txt", "classes.jar", "proguard.txt"]
         }
     }
+    
     buildTypes {
         release {
             consumerProguardFiles "proguard-rules.pro"
@@ -50,9 +46,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation 'androidx.annotation:annotation:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0"
-    compileOnly rootProject.findProject(":foundation_fluttify")
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    implementation "androidx.annotation:annotation:1.7.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0"
+    
+    // 3. 修复模块依赖（Flutter 插件需用 project(:) 替代 rootProject.findProject）
+    compileOnly project(path: ":foundation_fluttify", configuration: "default")
 }
