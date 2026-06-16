@@ -52,5 +52,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0"
     
     // 3. 修复模块依赖（Flutter 插件需用 project(:) 替代 rootProject.findProject）
-    compileOnly project(path: ":foundation_fluttify", configuration: "default")
+    compileOnly project(path: ":foundation_fluttify")
 }
